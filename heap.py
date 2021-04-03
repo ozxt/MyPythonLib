@@ -71,6 +71,10 @@ class Heap(object):
 
         return data
 
+    def extract_iter(self):
+        while not self.is_empty():
+            yield self.extract()
+
     def is_empty(self):
         return self.size==0
 
