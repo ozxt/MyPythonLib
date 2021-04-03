@@ -70,12 +70,17 @@ class Heap(object):
 
         return data
 
+    def is_empty(self):
+        return self.size==0
+
+    def __repr__(self):
+        return f"size:{self.size}\n{self.tree}"
 
 class MaxHeap(Heap):
-    def __init__(self):
-        super(MaxHeap, self).__init__(compare_larger)
+    def __init__(self,compare=compare_larger):
+        super(MaxHeap, self).__init__(compare)
 
 
 class MinHeap(Heap):
-    def __init__(self):
-        super(MinHeap, self).__init__(compare_smaller)
+    def __init__(self, compare=compare_smaller):
+        super(MinHeap, self).__init__(compare)
