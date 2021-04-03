@@ -50,6 +50,7 @@ class Heap(object):
             self.tree = []
             return data
         self.tree[0] = self.tree[self.size]
+        self.tree.pop()
         ipos = 0
         while ipos < self.size:
             left = heap_left(ipos)
