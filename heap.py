@@ -2,6 +2,21 @@ heap_parent = lambda i:(i-1)//2
 heap_left = lambda i:i*2+1
 heap_right = lambda i:i*2+2
 
+def compare_larger(a,b):
+    if a>b:
+        return 1
+    if a==b:
+        return 0
+    return -1
+
+def compare_smaller(a,b):
+    if a>b:
+        return -1
+    if a==b:
+        return 0
+    return 1
+
+
 class Heap(object):
     def __init__(self, compare):
         super(Heap, self).__init__()
@@ -56,9 +71,11 @@ class Heap(object):
         return data
 
 
-def compare(a,b):
-    if a>b:
-        return 1
-    if a==b:
-        return 0
-    return -1
+class MaxHeap(Heap):
+    def __init__(self):
+        super(MaxHeap, self).__init__(compare_larger)
+
+
+class MinHeap(Heap):
+    def __init__(self):
+        super(MinHeap, self).__init__(compare_smaller)
