@@ -2,12 +2,14 @@ heap_parent = lambda i:(i-1)//2
 heap_left = lambda i:i*2+1
 heap_right = lambda i:i*2+2
 
+
 def compare_larger(a,b):
     if a>b:
         return 1
     if a==b:
         return 0
     return -1
+
 
 def compare_smaller(a,b):
     if a>b:
@@ -18,6 +20,8 @@ def compare_smaller(a,b):
 
 
 class Heap(object):
+
+
     def __init__(self, compare):
         super(Heap, self).__init__()
         self.size = 0
@@ -71,15 +75,28 @@ class Heap(object):
 
         return data
 
+
     def extract_iter(self):
         while not self.is_empty():
             yield self.extract()
 
+
     def is_empty(self):
         return self.size==0
 
-    def __repr__(self):
+
+    def top(self):
+        if not self.is_empty():
+            return self.tree[0]
+
+
+    def __str__(self):
         return f"size:{self.size}\n{self.tree}"
+
+
+    def __repr__(self):
+        return f"{self.__class__} at {id(self)}"
+
 
 class MaxHeap(Heap):
     def __init__(self,compare=compare_larger):
