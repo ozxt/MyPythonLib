@@ -45,8 +45,8 @@ class BinaryIndexedTree:
 
 if __name__ == '__main__':
     # array = [2,1,1,9,2,3,4,5,6,7,8,9]
-    # array = [1]*38
-    array = [1,2,3,4,5,6,7,2,3,4,5,6,7,8,9,10,2,1,2,3,4,5,6,7,8,9,10,2,3,4,2,1,4,5,1,2,4,5]
+    array = [1]*38
+    # array = [1,2,3,4,5,6,7,2,3,4,5,6,7,8,9,10,2,1,2,3,4,5,6,7,8,9,10,2,3,4,2,1,4,5,1,2,4,5]
     bitree = BinaryIndexedTree(array)
     print(bitree.array)
     print(bitree.bitree[1:])
