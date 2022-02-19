@@ -4,105 +4,109 @@ heap_right = lambda i:i*2+2
 
 
 def compare_larger(a,b):
-    if a>b:
-        return 1
-    if a==b:
-        return 0
-    return -1
+    return a>b
+
+
+def compare_larger_or_equal(a,b):
+    return a>=b
 
 
 def compare_smaller(a,b):
-    if a>b:
-        return -1
-    if a==b:
-        return 0
-    return 1
+    return a<b
 
+
+def compare_smaller_or_equal(a,b):
+    return a<=b
 
 class Heap(object):
 
-
-    def __init__(self, compare):
+    def __init__(self, array, compare):
         super(Heap, self).__init__()
-        self.size = 0
-        self.tree = []
         self.cmp = compare
+        self._tree = list(array)
+        if array:
+            self._heapify()
 
-    def insert(self, data):
-        self.tree.append(data)
-        ipos = self.size
-        ppos = heap_parent(ipos)
-        tmp = self.tree[ipos]
-        while ipos>0:
-            if self.cmp(tmp, self.tree[ppos]) == 1:
-                self.tree[ipos] = self.tree[ppos]
-                ipos = ppos
-                ppos = heap_parent(ipos)
-            else:
-                break
-        self.tree[ipos] = tmp
-        self.size += 1
+
+
+    def _heapify(self):
+        size = len(self)
+        for i in range(size//2-1, -1, -1):
+            self._shiftdown(i)
+
+
+    def add(self, elem):
+        self._tree.append(elem)
+        self._shiftup(len(self)-1)
 
 
     def extract(self):
-        if self.size == 0:
+        if self.is_empty():
             return None
+        tree = self._tree
+        elem = tree[0]
+        end_elem = tree.pop()
+        if tree:
+            tree[0] = end_elem
+            self._shiftdown(0)
+        return elem
 
-        data = self.tree[0]
-        self.size -= 1
-        if self.size == 0:
-            self.tree = []
-            return data
-        self.tree[0] = self.tree[self.size]
-        self.tree.pop()
-        ipos = 0
-        while ipos < self.size:
-            left = heap_left(ipos)
-            right = heap_right(ipos)
-            if left < self.size and self.cmp(self.tree[ipos],self.tree[left]) == -1:
-                mpos = left
-            else:
-                mpos = ipos
 
-            if right < self.size and self.cmp(self.tree[mpos], self.tree[right]) == -1:
-                mpos = right
+    def _shiftup(self, index):
+        tree = self._tree
+        elem = tree[index]
+        pindex = heap_parent(index)
+        while index>0 and \
+            self.cmp(elem, tree[pindex]):
+                tree[index] = tree[pindex]
+                index = pindex
+                pindex = heap_parent(index)
+        tree[index] = elem
 
-            if mpos == ipos:
+
+    def _shiftdown(self, index):
+        tree = self._tree
+        elem = tree[index]
+        size = len(self)
+        shift_to = heap_left(index)
+        while shift_to<size:
+            if shift_to+1<size and \
+                self.cmp(tree[shift_to+1], tree[shift_to]):
+                    shift_to += 1
+            if self.cmp(elem, tree[shift_to]):
                 break
-            else:
-                self.tree[ipos], self.tree[mpos] = self.tree[mpos], self.tree[ipos]
-                ipos = mpos
-
-        return data
-
-
-    def extract_iter(self):
-        while not self.is_empty():
-            yield self.extract()
+            tree[index] = tree[shift_to]
+            index = shift_to
+            shift_to = heap_left(index)
+        tree[index] = elem
 
 
     def is_empty(self):
-        return self.size==0
+        return len(self)==0
 
 
     def top(self):
         if not self.is_empty():
-            return self.tree[0]
+            return self._tree[0]
 
 
     def __str__(self):
-        return f"size:{self.size}\n{self.tree}"
+        return f"size:{len(self)}\n{self._tree}"
 
 
     def __repr__(self):
         return f"{self.__class__} at {id(self)}"
 
 
+    def __len__(self):
+        return len(self._tree)
+
+
 class MaxHeap(Heap):
-    def __init__(self,compare=compare_larger):
-        super(MaxHeap, self).__init__(compare)
+    def __init__(self,array=[], compare=compare_larger_or_equal):
+        super(MaxHeap, self).__init__(array, compare)
 
 
 class MinHeap(Heap):
-    def __init__(self, compare=compare_smaller):
-        super(MinHeap, self).__init__(compare)
+    def __init__(self, array=[], compare=compare_smaller_or_equal):
+        super(MinHeap, self).__init__(array,compare)
