@@ -8,7 +8,7 @@ def quicksort(arr, reverse=False):
     对arr原地进行快速排序
 
     :param arr: 待排数组
-    :param reverse： 默认升序，置True为降序
+    :param reverse: 默认升序,置True为降序
     """
     # _quicksort(arr,0,len(arr)-1,reverse)
     _quicksort_equal_aggregation(arr,0,len(arr)-1,reverse)
