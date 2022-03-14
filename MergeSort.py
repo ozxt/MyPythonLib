@@ -21,7 +21,8 @@ def _mergesort(arr, left, right, reverse):
         mid = left + (right-left)//2
         _mergesort(arr, left, mid, reverse)
         _mergesort(arr, mid+1, right, reverse)
-        _merge(arr, left, mid, right, reverse)
+        # _merge(arr, left, mid, right, reverse)
+        _merge_in_place(arr, left, mid, right, reverse)
 
 
 def _merge(arr, left, mid, right, reverse):
@@ -31,6 +32,11 @@ def _merge(arr, left, mid, right, reverse):
     """
     global aux_arr
     cmp = (lambda a,b: a<=b) if reverse else (lambda a,b: a>=b)
+
+    # 优化，若已经有序则不需要再排
+    if cmp(arr[mid+1],arr[mid]):
+        return
+
     # 把区间复制到辅助数组，在重新排序到arr[left,right]
     for i in range(left, right+1):
         aux_arr[i] = arr[i]
@@ -50,6 +56,21 @@ def _merge(arr, left, mid, right, reverse):
             arr[k] = aux_arr[i]
             i+=1
 
+
+def _merge_in_place(arr, left, mid, right, reverse):
+    """原地合并arr[left,mid]和arr[mid+1,right]
+    """
+    cmp = (lambda a,b: a<=b) if reverse else (lambda a,b: a>=b)
+    j = mid+1
+    for k in range(left,right+1):
+        if j>right:
+            break
+        if cmp(arr[k], arr[j]):
+            tmp = arr[j]
+            for m in range(j-1,k-1,-1):
+                arr[m+1]=arr[m]
+            arr[k] = tmp
+            j+=1
 
 
 
